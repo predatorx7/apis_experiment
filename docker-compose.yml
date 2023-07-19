@@ -1,0 +1,69 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx_container
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - api_gateway
+    networks:
+      - jhangad_network
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+  api_gateway:
+    container_name: api_gateway
+    build:
+      context: ./api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth_service
+      - demo_service
+      - hello_service
+    networks:
+      - jhangad_network
+
+  auth_service:
+    container_name: auth_service
+    build:
+      context: ./auth_service
+    ports:
+      - "8001:8001"
+    networks:
+      - jhangad_network
+
+  demo_service:
+    container_name: demo_service
+    build:
+      context: ./demo_service
+    ports:
+      - "8002:8002"
+    networks:
+      - jhangad_network
+
+  hello_service:
+    container_name: hello_service
+    build:
+      context: ./hello_service
+    ports:
+      - "8003:8003"
+    networks:
+      - jhangad_network
+
+networks:
+  jhangad_network:
+    driver: bridge
+    name: jhangad_network
+    external: true
