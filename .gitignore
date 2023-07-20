@@ -1,0 +1,6 @@
+# This should be backed up separately
+db/
+
+# Uncomment in real project
+# .env
+# .pgpass

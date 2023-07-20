@@ -1,5 +1,23 @@
 version: "3"
 services:
+  db:
+    image: postgres:15-bookworm
+    ports:
+      - "5432:5432"
+    container_name: db_container
+    command: -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./dba-postgres.conf:/etc/postgresql/postgresql.conf 
+    cap_add:
+      - SYS_NICE
+    restart: always
+    env_file: .env
+    networks:
+      - jhangad_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   nginx:
     container_name: nginx_container
     image: nginx:latest
