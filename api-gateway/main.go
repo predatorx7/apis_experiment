@@ -42,7 +42,7 @@ var backendServices = []backendService{
 		authRequired: false,
 	},
 	{
-		URL:        "http://nodejs_hello_api:3000", // Example backend service 2
+		URL:        "http://nodejs_hello_api:8004", // Example backend service 2
 		PathPrefix: "/",
 		authRequired: true,
 	},
