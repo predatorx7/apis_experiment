@@ -50,6 +50,7 @@ services:
       - auth_service
       - demo_service
       - hello_service
+      - nodejs_hello_api
     networks:
       - jhangad_network
 
@@ -77,6 +78,15 @@ services:
       context: ./hello_service
     ports:
       - "8003:8003"
+    networks:
+      - jhangad_network
+
+  nodejs_hello_api:
+    container_name: nodejs_hello_api
+    build:
+      context: ./nodejs_hello_api
+    ports:
+      - "3000:3000"
     networks:
       - jhangad_network
 
