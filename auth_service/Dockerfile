@@ -1,11 +1,23 @@
-FROM python:3.9-slim
+FROM node:18-bookworm-slim
 
-WORKDIR /app
+WORKDIR /opt/app/
 
 COPY . .
 
-RUN pip install --no-cache-dir fastapi uvicorn[standard]
+## Uncomment the below lines to update image security content if any
+# USER root
+# RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && dnf clean all
 
-EXPOSE 8001
+COPY package*.json ./
 
-CMD ["python", "main.py"]
+# RUN ls -lA && yarn install --prod && yarn run compile
+RUN ls -lA && yarn install && yarn run compile
+
+# COPY licenses /licenses
+# COPY public public
+
+# ENV HOST=0.0.0.0 PORT=3001
+
+# EXPOSE 3001/tcp
+
+CMD ["yarn","run","serve"]
